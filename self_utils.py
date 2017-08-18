@@ -10,6 +10,8 @@ def plot(actual, predict, title):
     plt.plot([min(actual), max(actual)], [min(actual), max(actual)],c ='red')
     plt.tight_layout()
     
+
+
 def error_plot(actual, predict, title):
     fig = plt.figure(figsize=(8, 4))
     ax1 = fig.add_subplot(1,2,1)
@@ -49,3 +51,32 @@ def summary(model,train_features, train_labels, valid_features, valid_labels):
     error_plot(valid_labels, valid_predicts, 'Validating Set')
     
    
+
+   def model_feature_importances(pipe, model):
+
+        plt.figure(figsize = (10,3.5))
+        pd.Series( pipe.named_steps[model].feature_importances_
+                  ).sort_values(ascending=False)[0:10].plot(y ='A',use_index = False)
+        plt.title('Model Features Importance')
+        plt.xticks(rotation = 90)
+    
+
+
+
+def pca_importance(pipe, col, i):
+    plt.figure(figsize = (10,4))
+    pd.Series( pipe.named_steps['pca'].explained_variance_ratio_[0:10]
+              )[0:10].plot(y ='Explained Variance',use_index = False)
+    plt.title('PCA First ' + str(i) + ' Components' + 'explanied variance')
+    plt.xticks(rotation = 90)
+    plt.ylabel('Explained Variance')
+    
+    
+    ##
+    for i in range(i):
+        plt.figure(figsize = (10,3.5))
+        pd.Series( pipe.named_steps['pca'].components_[i],
+              index =col).sort_values(ascending=False)[0:10].plot(y ='A',use_index = True)
+        plt.title('PC' + str(i) + ' Component' + 'First 10 most importance features')
+        plt.xticks(rotation = 90)
+
